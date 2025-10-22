@@ -1,0 +1,6 @@
+# Ignore cache or secrets
+*.log
+*.cache
+*.bak
+secrets.*
+
