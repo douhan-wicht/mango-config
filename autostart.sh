@@ -2,12 +2,12 @@
 
 set +e
 
+# obs
+# dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots >/dev/null 2>&1
+
 # monitor layout
 ~/.config/mango/scripts/monitor.sh >/dev/null 2>&1 &
 sleep 1
-
-# obs
-dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots >/dev/null 2>&1
 
 # notify
 swaync -c ~/.config/mango/swaync/config.jsonc -s ~/.config/mango/swaync/style.css >/dev/null 2>&1 &
