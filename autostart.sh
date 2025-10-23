@@ -2,8 +2,9 @@
 
 set +e
 
-# obs
-# dbus-update-activation-environment --systemd WAYLAND_DISPLAY=wayland-0 XDG_CURRENT_DESKTOP=wlroots >/dev/null 2>&1
+# fix xdg-portal
+systemctl --user import-environment &
+systemctl --user restart xdg-desktop-portal.service &
 
 # monitor layout
 ~/.config/mango/scripts/monitor.sh >/dev/null 2>&1 &
