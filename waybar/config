@@ -123,6 +123,9 @@
     "orientation": "horizontal",
     "modules": [
       "custom/openbracket",
+      "tray",
+      "custom/closebracket",
+      "custom/openbracket",
       "wireplumber",
       "custom/closebracket",
       "custom/openbracket",
@@ -188,6 +191,10 @@
     },
     "scroll-step": 5,
     "on-click": "pavucontrol"
+  },
+  "tray": {
+    "icon-size": 18,
+    "spacing": 10
   }
 }]
 
