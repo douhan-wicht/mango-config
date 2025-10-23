@@ -206,6 +206,17 @@ button {
   animation: blink 0.5s steps(12) infinite alternate;
 }
 
+/* custom nextcloud module */
+#custom-nextcloud.ok {
+  color: #4ade80;
+}
+#custom-nextcloud.sync {
+  color: #facc15;
+}
+#custom-nextcloud.error {
+  color: #ef4444;
+}
+
 @keyframes blink {
   to {
     background-color: @second-background;
