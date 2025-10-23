@@ -123,6 +123,9 @@
     "orientation": "horizontal",
     "modules": [
       "custom/openbracket",
+      "wireplumber",
+      "custom/closebracket",
+      "custom/openbracket",
       "clock",
       "custom/split",
       "network",
@@ -176,6 +179,15 @@
     "exec": "swaync-client -swb",
     "on-click": "swaync-client --toggle-panel",
     "interval": 0
+  },
+  "wireplumber": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 Muted",
+    "format-icons": {
+      "default": ["󰕿", "󰖀", "󰕾"]
+    },
+    "scroll-step": 5,
+    "on-click": "pavucontrol"
   }
 }]
 
