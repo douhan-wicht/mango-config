@@ -3,7 +3,7 @@
 set +e
 
 # obs
-# dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=wlroots >/dev/null 2>&1
+# dbus-update-activation-environment --systemd WAYLAND_DISPLAY=wayland-0 XDG_CURRENT_DESKTOP=wlroots >/dev/null 2>&1
 
 # monitor layout
 ~/.config/mango/scripts/monitor.sh >/dev/null 2>&1 &
