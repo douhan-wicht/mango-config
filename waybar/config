@@ -123,6 +123,9 @@
     "orientation": "horizontal",
     "modules": [
       "custom/openbracket",
+      "custom/uair",
+      "custom/closebracket",
+      "custom/openbracket",
       "custom/nextcloud",
       "custom/closebracket",
       "custom/openbracket",
@@ -202,6 +205,30 @@
     "return-type": "text",
     "format": "{}",
     "tooltip": false
+  },
+  "custom/uair": {
+    "return-type": "json",
+    "format": "{icon} {text}",
+    "interval": 1,
+
+    "format-icons": [
+      "○○○○○○○○○●",
+      "○○○○○○○○●●",
+      "○○○○○○●●●●",
+      "○○○○○●●●●●",
+      "○○○○●●●●●●",
+      "○○○●●●●●●●",
+      "○○●●●●●●●●",
+      "○●●●●●●●●●",
+      "●●●●●●●●●●"
+    ],
+
+    "exec": "uairctl fetch '{\"text\":\"{name} {time}\",\"tooltip\":\"{state}\",\"percentage\":{percent}}'",
+    "exec-if": "pgrep -x uair",
+    "on-click": "uairctl toggle",
+    "on-click-right": "uairctl next",
+    "on-click-middle": "uairctl prev",
+    "tooltip": true
   }
 }]
 

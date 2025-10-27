@@ -1,4 +1,4 @@
-#!/etc/profiles/per-user/douhan/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 sleep 1  # allow compositor to register outputs

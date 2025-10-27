@@ -217,6 +217,11 @@ button {
   color: #ef4444;
 }
 
+/* uair colours */
+#custom-uair.resumed {
+  color: #f87171;
+}
+
 @keyframes blink {
   to {
     background-color: @second-background;
