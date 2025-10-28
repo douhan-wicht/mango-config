@@ -1,26 +1,56 @@
 #!/usr/bin/env bash
 set -euo pipefail
+sleep 1
 
-sleep 1  # let compositor settle
+# --- helpers ---------------------------------------------------------
+best_mode_for() {
+    local out=$1
+    wlr-randr --output "$out" |
+        awk '/px, [0-9.]+ Hz/ {
+            split($1,a,"x"); w=a[1]; h=a[2]; r=$3;
+            printf "%d %d %.6f\n", w, h, r
+        }' |
+        sort -k1,1n -k2,2n -k3,3n |
+        tail -n1 |
+        awk '{printf "%dx%d@%0.6fHz",$1,$2,$3}'
+}
 
-# Check if external monitor is connected
-if wlr-randr | grep -q '^DP-1 "'; then
-    echo "External monitor DP-1 detected → enabling it only"
+scale_for() {
+    local res=$1
+    local width=${res%x*}
+    if   (( width >= 5000 )); then echo 2
+    elif (( width >= 3800 )); then echo 1.5
+    else                           echo 1
+    fi
+}
 
-    # Pick the mode with the highest refresh rate automatically
-    best_mode=$(wlr-randr --output DP-1 | awk '/px,/{print $1, $3}' | sort -k2,2nr | head -n1 | awk '{print $1"@"$2}')
-    echo "Using best mode for DP-1: $best_mode"
+notify() { command -v notify-send >/dev/null && notify-send -a "Monitor Setup" "$1" "$2"; }
 
-    # Disable laptop screen if present
-    internal_output=$(wlr-randr | grep -E 'eDP|LVDS' | awk '{print $1}' | head -n1 || true)
-    [ -n "${internal_output:-}" ] && wlr-randr --output "$internal_output" --off || true
+# --- detect outputs --------------------------------------------------
+internal=$(wlr-randr | awk '/^(eDP|LVDS)-/ {print $1; exit}')
+external=$(wlr-randr | awk '/^(DP|HDMI)-/ {print $1; exit}')
 
-    # Apply the mode
-    wlr-randr --output DP-1 --mode "$best_mode" --pos 0,0 --scale 1
+# --- main logic ------------------------------------------------------
+if [[ -n "$external" && $(wlr-randr --output "$external" | grep -c "px,") -gt 0 ]]; then
+    echo "External monitor $external detected → external only"
+    best=$(best_mode_for "$external")
+    res=${best%@*}
+    scale=$(scale_for "$res")
+    echo "$external → $best • scale $scale"
+    [[ -n "$internal" ]] && wlr-randr --output "$internal" --off || true
+    wlr-randr --output "$external" --mode "$best" --pos 0,0 --scale "$scale"
+    notify "External Monitor Activated" "$external • $best • scale $scale×"
 else
-    echo "External monitor not found → using internal screen"
-    internal_output=$(wlr-randr | grep -E 'eDP|LVDS' | awk '{print $1}' | head -n1)
-    best_mode=$(wlr-randr --output "$internal_output" | awk '/px,/{print $1, $3}' | sort -k2,2nr | head -n1 | awk '{print $1"@"$2}')
-    wlr-randr --output "$internal_output" --mode "$best_mode" --pos 0,0 --scale 1
+    echo "No external monitor → internal only"
+    if [[ -n "$internal" ]]; then
+        best=$(best_mode_for "$internal")
+        res=${best%@*}
+        scale=$(scale_for "$res")
+        echo "$internal → $best • scale $scale"
+        wlr-randr --output "$internal" --on --mode "$best" --pos 0,0 --scale "$scale"
+        notify "Laptop Display Activated" "$internal • $best • scale $scale×"
+    else
+        notify "Monitor Script" "No active display found!"
+    fi
 fi
 

@@ -8,7 +8,7 @@ systemctl --user restart xdg-desktop-portal.service &
 
 # monitor layout
 ~/.config/mango/scripts/monitor.sh >/dev/null 2>&1 &
-sleep 1
+~/.config/mango/scripts/monitor-watch.sh >/dev/null 2>&1 &
 
 # notify
 swaync -c ~/.config/mango/swaync/config.jsonc -s ~/.config/mango/swaync/style.css >/dev/null 2>&1 &
