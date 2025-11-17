@@ -10,6 +10,11 @@ systemctl --user restart xdg-desktop-portal.service &
 ~/.config/mango/scripts/monitor.sh >/dev/null 2>&1 &
 ~/.config/mango/scripts/monitor-watch.sh >/dev/null 2>&1 &
 
+# Fix Java/MATLAB blank window issue
+wmname LG3D
+export QT_QPA_PLATFORM=xcb
+export MATLAB_USE_GL=software
+
 # notify
 swaync -c ~/.config/mango/swaync/config.jsonc -s ~/.config/mango/swaync/style.css >/dev/null 2>&1 &
 
